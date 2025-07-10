@@ -292,9 +292,10 @@
       });
     });
 
-   document.getElementById('feasibilityForm').addEventListener('submit', function (e) {
+document.getElementById('feasibilityForm').addEventListener('submit', async function (e) {
   e.preventDefault();
 
+  const refInput = document.getElementById('reference_number');
   const refValue = refInput.value.trim();
   const numberPart = refValue.split('-').pop();
   const refPattern = /^MSQ-\d{4}-\d{3}$/;
@@ -308,16 +309,14 @@
   const form = this;
   const formData = new FormData(form);
 
-  // Manually extract all apps table rows row-wise
+  // Manually extract all apps table rows
   const rows = document.querySelectorAll('#appsTable tbody tr');
   const apps_services = [];
-
   rows.forEach(row => {
     const app = row.querySelector('input[name="app_service[]"]').value.trim();
     const available = row.querySelector('input[name="available_on[]"]').value.trim();
     const plan = row.querySelector('input[name="plan_required[]"]').value.trim();
 
-    // Skip completely empty rows
     if (app || available || plan) {
       apps_services.push({
         app_service: app,
@@ -327,11 +326,10 @@
     }
   });
 
-  // Convert remaining form fields to plain object
+  // Convert remaining fields into object
   const data = {};
   formData.forEach((value, key) => {
-    // Avoid duplicating the apps table fields in root level
-    if (!["app_service[]", "available_on[]", "plan_required[]"].includes(key)) {
+    if (!["app_service[]", "available_on[]", "plan_required[]", "workflow_image"].includes(key)) {
       if (data[key]) {
         if (!Array.isArray(data[key])) data[key] = [data[key]];
         data[key].push(value);
@@ -341,12 +339,17 @@
     }
   });
 
-  // Add structured table array to payload
-  data.apps_services = apps_services;
+  // Convert image to base64 if exists
+  const file = form.querySelector('input[name="workflow_image"]').files[0];
+  if (file) {
+    data.workflow_image = await toBase64(file);
+  }
 
-  // Optional: include reference_number in payload
+  // Include other structured data
+  data.apps_services = apps_services;
   data.reference_number = refValue;
 
+  // POST to webhook
   fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
     method: "POST",
     headers: {
@@ -369,6 +372,16 @@
     }
   })
   .catch(err => alert("Error: " + err.message));
+});
+
+// Helper to convert image to base64
+function toBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+    reader.readAsDataURL(file); // returns base64 with data:image/... prefix
+  });
 });
 
   </script>
