@@ -11,14 +11,11 @@
       margin: 0;
       padding: 20px;
     }
-::placeholder {
-  font-style: italic;
-  font-size: 1em;
-  font-weight: normal;
-}
-
-
-
+    ::placeholder {
+      font-style: italic;
+      font-size: 1em;
+      font-weight: normal;
+    }
     .container {
       max-width: 900px;
       margin: auto;
@@ -27,31 +24,26 @@
       border-radius: 10px;
       box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
-
     h2 {
       text-align: center;
       color: #2c3e50;
     }
-
     fieldset {
       border: 1px solid #ccc;
       border-radius: 8px;
       padding: 25px 30px;
       margin-bottom: 25px;
     }
-
     legend {
       font-weight: bold;
       font-size: 1.1em;
       color: #2c3e50;
     }
-
     label {
       display: block;
       margin: 15px 0 5px;
       font-weight: 500;
     }
-
     input[type="text"],
     input[type="date"],
     input[type="file"],
@@ -65,26 +57,22 @@
       font-size: 1em;
       box-sizing: border-box;
     }
-
     textarea {
       resize: vertical;
       white-space: pre-line;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-weight: 500;
     }
-
     .reference-number-below {
       display: flex;
       justify-content: flex-end;
       margin-bottom: 25px;
     }
-
     .reference-number-below label {
       font-weight: bold;
       font-size: 0.9em;
       margin-right: 5px;
     }
-
     .reference-number-below input {
       width: 160px;
       padding: 6px 10px;
@@ -92,13 +80,11 @@
       border: 1px solid #ccc;
       border-radius: 5px;
     }
-
     .priority-buttons {
       display: flex;
       gap: 15px;
       margin-top: 10px;
     }
-
     .priority-btn {
       padding: 8px 14px;
       border-radius: 20px;
@@ -110,41 +96,34 @@
       user-select: none;
       transition: all 0.2s ease-in-out;
     }
-
     #complexity-high:checked + label {
       background-color: #ffe6e6;
       color: #b30000;
       border-color: #b30000;
     }
-
     #complexity-medium:checked + label {
       background-color: #fff6cc;
       color: #b38f00;
       border-color: #b38f00;
     }
-
     #complexity-low:checked + label {
       background-color: #f2f2f2;
       color: #333;
       border-color: #999;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 15px;
     }
-
     th, td {
       border: 1px solid #ccc;
       padding: 8px;
       text-align: left;
     }
-
     th {
       background-color: #f4f4f4;
     }
-
     button {
       background-color: #2c3e50;
       color: white;
@@ -156,7 +135,6 @@
       display: block;
       margin: 20px auto 0;
     }
-
     button:hover {
       background-color: #1a242f;
     }
@@ -176,28 +154,23 @@
         <legend>Project Reference</legend>
         <label>Client Name:</label>
         <input type="text" name="client_name" required />
-
         <label>Project Title / Short Description:</label>
         <input type="text" name="project_title" required />
-
         <label>Date of Review:</label>
-<input type="date" name="review_date" placeholder="Select date of review" required style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-style: italic;" />
-
+        <input type="date" name="review_date" required style="font-style: italic;" />
         <label>Engineer Name:</label>
         <input type="text" name="engineer_name" required />
       </fieldset>
 
       <fieldset>
         <legend>Proposed Solution</legend>
-        <textarea class="bulleted" name="proposed_solution" rows="5" 
-          placeholder="• Use Make.com to fetch order data from Shopify every 15 minutes.
+        <textarea class="bulleted" name="proposed_solution" rows="5" placeholder="• Use Make.com to fetch order data from Shopify every 15 minutes.
 • Automatically send the data to Google Sheets for reporting." required></textarea>
       </fieldset>
 
       <fieldset>
         <legend>Workflow Steps</legend>
-        <textarea class="bulleted" name="workflow_steps" rows="6"
-          placeholder="• Trigger: New row added in Google Sheets
+        <textarea class="bulleted" name="workflow_steps" rows="6" placeholder="• Trigger: New row added in Google Sheets
 • Action: Extract customer name, send WhatsApp message
 • Log data in Airtable" required></textarea>
         <label>Upload Process Diagram (if available):</label>
@@ -210,7 +183,7 @@
           <thead>
             <tr>
               <th>App/Service</th>
-              <th>Available on Make/API</th>
+              <th>Available as Native</th>
               <th>Plan Required</th>
             </tr>
           </thead>
@@ -235,10 +208,8 @@
         <div class="priority-buttons">
           <input type="radio" id="complexity-high" name="complexity" value="High" hidden required>
           <label for="complexity-high" class="priority-btn">🔴 High</label>
-
           <input type="radio" id="complexity-medium" name="complexity" value="Medium" hidden>
           <label for="complexity-medium" class="priority-btn">🟡 Medium</label>
-
           <input type="radio" id="complexity-low" name="complexity" value="Low" hidden>
           <label for="complexity-low" class="priority-btn">⚪ Low</label>
         </div>
@@ -246,15 +217,13 @@
 
       <fieldset>
         <legend>Non-Feasible Components & Workarounds</legend>
-        <textarea class="bulleted" name="non_feasible_components" rows="5"
-          placeholder="• WhatsApp Business API requires official number — not feasible without approval.
+        <textarea class="bulleted" name="non_feasible_components" rows="5" placeholder="• WhatsApp Business API requires official number — not feasible without approval.
 • Workaround: Use Twilio SMS for now."></textarea>
       </fieldset>
 
       <fieldset>
         <legend>Assumptions & Clarifications Needed</legend>
-        <textarea class="bulleted" name="assumptions" rows="5"
-          placeholder="• Assume client has admin access to Gmail and Tally.
+        <textarea class="bulleted" name="assumptions" rows="5" placeholder="• Assume client has admin access to Gmail and Tally.
 • Clarify whether all orders need to be synced or only paid ones."></textarea>
       </fieldset>
 
@@ -265,8 +234,7 @@
 
       <fieldset>
         <legend>What We Need From the Client</legend>
-        <textarea class="bulleted" name="client_requirements" rows="5"
-          placeholder="• Admin access to Make.com (admin@clientdomain.com)
+        <textarea class="bulleted" name="client_requirements" rows="5" placeholder="• Admin access to Make.com (admin@clientdomain.com)
 • API credentials for Zoho, Shopify
 • Approval on proposed fallback options" required></textarea>
       </fieldset>
@@ -337,11 +305,39 @@
         return;
       }
 
-      const formData = new FormData(this);
+      const form = this;
+      const formData = new FormData(form);
 
-      fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
+      const appsTable = document.querySelectorAll('#appsTable tbody tr');
+      const apps = [];
+
+      appsTable.forEach(row => {
+        const app = row.querySelector('input[name="app_service[]"]').value.trim();
+        const available = row.querySelector('input[name="available_on[]"]').value.trim();
+        const plan = row.querySelector('input[name="plan_required[]"]').value.trim();
+        if (app || available || plan) {
+          apps.push({ app_service: app, available_on: available, plan_required: plan });
+        }
+      });
+
+      const data = {};
+      formData.forEach((value, key) => {
+        if (data[key]) {
+          if (!Array.isArray(data[key])) data[key] = [data[key]];
+          data[key].push(value);
+        } else {
+          data[key] = value;
+        }
+      });
+
+      data.apps_services = apps;
+
+      fetch("https://hook.eu1.make.com/your-make-webhook-url", {
         method: "POST",
-        body: formData
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
       })
       .then(res => {
         if (res.ok) {
