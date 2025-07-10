@@ -1,4 +1,3 @@
-You said:
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -165,15 +164,12 @@ You said:
 
       <fieldset>
         <legend>Proposed Solution</legend>
-        <textarea class="bulleted" name="proposed_solution" rows="5" placeholder="• Use Make.com to fetch order data from Shopify every 15 minutes.
-• Automatically send the data to Google Sheets for reporting." required></textarea>
+        <textarea class="bulleted" name="proposed_solution" rows="5" required></textarea>
       </fieldset>
 
       <fieldset>
         <legend>Workflow Steps</legend>
-        <textarea class="bulleted" name="workflow_steps" rows="6" placeholder="• Trigger: New row added in Google Sheets
-• Action: Extract customer name, send WhatsApp message
-• Log data in Airtable" required></textarea>
+        <textarea class="bulleted" name="workflow_steps" rows="6" required></textarea>
         <label>Upload Process Diagram (if available):</label>
         <input type="file" name="workflow_image" accept="image/*" />
       </fieldset>
@@ -201,7 +197,7 @@ You said:
 
       <fieldset>
         <legend>Estimated Ballpark (in Hours)</legend>
-        <input type="text" name="estimated_hours" placeholder="e.g., 12" required />
+        <input type="text" name="estimated_hours" required />
       </fieldset>
 
       <fieldset>
@@ -218,26 +214,22 @@ You said:
 
       <fieldset>
         <legend>Non-Feasible Components & Workarounds</legend>
-        <textarea class="bulleted" name="non_feasible_components" rows="5" placeholder="• WhatsApp Business API requires official number — not feasible without approval.
-• Workaround: Use Twilio SMS for now."></textarea>
+        <textarea class="bulleted" name="non_feasible_components" rows="5"></textarea>
       </fieldset>
 
       <fieldset>
         <legend>Assumptions & Clarifications Needed</legend>
-        <textarea class="bulleted" name="assumptions" rows="5" placeholder="• Assume client has admin access to Gmail and Tally.
-• Clarify whether all orders need to be synced or only paid ones."></textarea>
+        <textarea class="bulleted" name="assumptions" rows="5"></textarea>
       </fieldset>
 
       <fieldset>
         <legend>Proposed Delivery Time</legend>
-        <input type="text" name="delivery_time" placeholder="e.g., 5 working days" />
+        <input type="text" name="delivery_time" />
       </fieldset>
 
       <fieldset>
         <legend>What We Need From the Client</legend>
-        <textarea class="bulleted" name="client_requirements" rows="5" placeholder="• Admin access to Make.com (admin@clientdomain.com)
-• API credentials for Zoho, Shopify
-• Approval on proposed fallback options" required></textarea>
+        <textarea class="bulleted" name="client_requirements" rows="5" required></textarea>
       </fieldset>
 
       <button type="submit">Submit Feasibility Form</button>
@@ -249,7 +241,7 @@ You said:
     const now = new Date();
     const year = now.getFullYear().toString().slice(-2);
     const month = String(now.getMonth() + 1).padStart(2, '0');
-    const dynamicPrefix = MSQ-${year}${month}-;
+    const dynamicPrefix = `MSQ-${year}${month}-`;
     refInput.value = dynamicPrefix;
     refInput.setAttribute("maxlength", dynamicPrefix.length + 3);
 
@@ -293,85 +285,58 @@ You said:
       });
     });
 
-   document.getElementById('feasibilityForm').addEventListener('submit', function (e) {
-  e.preventDefault();
+    document.getElementById('feasibilityForm').addEventListener('submit', function (e) {
+      e.preventDefault();
 
-  const refValue = refInput.value.trim();
-  const numberPart = refValue.split('-').pop();
-  const refPattern = /^MSQ-\d{4}-\d{3}$/;
+      const refValue = refInput.value.trim();
+      const numberPart = refValue.split('-').pop();
+      const refPattern = /^MSQ-\d{4}-\d{3}$/;
 
-  if (!/^\d+$/.test(numberPart) || !refPattern.test(refValue)) {
-    alert('Reference number must be in the format MSQ-YYMM-### (numbers only).');
-    refInput.focus();
-    return;
-  }
-
-  const form = this;
-  const formData = new FormData(form);
-
-  // Manually extract all apps table rows row-wise
-  const rows = document.querySelectorAll('#appsTable tbody tr');
-  const apps_services = [];
-
-  rows.forEach(row => {
-    const app = row.querySelector('input[name="app_service[]"]').value.trim();
-    const available = row.querySelector('input[name="available_on[]"]').value.trim();
-    const plan = row.querySelector('input[name="plan_required[]"]').value.trim();
-
-    // Skip completely empty rows
-    if (app || available || plan) {
-      apps_services.push({
-        app_service: app,
-        available_on: available,
-        plan_required: plan
-      });
-    }
-  });
-
-  // Convert remaining form fields to plain object
-  const data = {};
-  formData.forEach((value, key) => {
-    // Avoid duplicating the apps table fields in root level
-    if (!["app_service[]", "available_on[]", "plan_required[]"].includes(key)) {
-      if (data[key]) {
-        if (!Array.isArray(data[key])) data[key] = [data[key]];
-        data[key].push(value);
-      } else {
-        data[key] = value;
+      if (!/^\d+$/.test(numberPart) || !refPattern.test(refValue)) {
+        alert('Reference number must be in the format MSQ-YYMM-### (numbers only).');
+        refInput.focus();
+        return;
       }
-    }
-  });
 
-  // Add structured table array to payload
-  data.apps_services = apps_services;
+      const formData = new FormData(this);
 
-  // Optional: include reference_number in payload
-  data.reference_number = refValue;
+      // Process apps table as JSON string to embed in FormData
+      const rows = document.querySelectorAll('#appsTable tbody tr');
+      const apps_services = [];
 
-  fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  })
-  .then(res => {
-    if (res.ok) {
-      document.querySelector(".container").innerHTML = 
-        <div style="text-align: center; padding: 60px;">
-          <h2 style="color: green;">✅ Submitted!</h2>
-          <p>Your Engineering Feasibility Review has been submitted.</p>
-          <a href="" style="display:inline-block; margin-top: 25px; padding: 12px 24px; background-color: #2c3e50; color: white; border-radius: 8px; text-decoration: none;">
-            Submit Another
-          </a>
-        </div>;
-    } else {
-      alert("Submission failed. Please try again.");
-    }
-  })
-  .catch(err => alert("Error: " + err.message));
-});
+      rows.forEach(row => {
+        const app = row.querySelector('input[name="app_service[]"]').value.trim();
+        const available = row.querySelector('input[name="available_on[]"]').value.trim();
+        const plan = row.querySelector('input[name="plan_required[]"]').value.trim();
 
+        if (app || available || plan) {
+          apps_services.push({ app_service: app, available_on: available, plan_required: plan });
+        }
+      });
+
+      formData.append("apps_services", JSON.stringify(apps_services));
+      formData.set("reference_number", refValue);
+
+      fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
+        method: "POST",
+        body: formData
+      })
+      .then(res => {
+        if (res.ok) {
+          document.querySelector(".container").innerHTML = `
+            <div style="text-align: center; padding: 60px;">
+              <h2 style="color: green;">✅ Submitted!</h2>
+              <p>Your Engineering Feasibility Review has been submitted.</p>
+              <a href="" style="display:inline-block; margin-top: 25px; padding: 12px 24px; background-color: #2c3e50; color: white; border-radius: 8px; text-decoration: none;">
+                Submit Another
+              </a>
+            </div>`;
+        } else {
+          alert("Submission failed. Please try again.");
+        }
+      })
+      .catch(err => alert("Error: " + err.message));
+    });
   </script>
 </body>
 </html>
