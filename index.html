@@ -13,6 +13,7 @@
     }
     ::placeholder {
       font-style: italic;
+      font-size: 1em;
     }
     .container {
       max-width: 900px;
@@ -49,6 +50,7 @@
     select {
       width: 100%;
       padding: 10px;
+      margin-top: 3px;
       border: 1px solid #ccc;
       border-radius: 6px;
       font-size: 1em;
@@ -58,6 +60,7 @@
       resize: vertical;
       white-space: pre-line;
       font-family: inherit;
+      font-weight: 500;
     }
     .reference-number-below {
       display: flex;
@@ -73,6 +76,8 @@
       width: 160px;
       padding: 6px 10px;
       font-size: 0.9em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
     .priority-buttons {
       display: flex;
@@ -88,6 +93,7 @@
       font-weight: bold;
       cursor: pointer;
       user-select: none;
+      transition: all 0.2s ease-in-out;
     }
     #complexity-high:checked + label {
       background-color: #ffe6e6;
@@ -112,6 +118,7 @@
     th, td {
       border: 1px solid #ccc;
       padding: 8px;
+      text-align: left;
     }
     th {
       background-color: #f4f4f4;
@@ -120,10 +127,12 @@
       background-color: #2c3e50;
       color: white;
       padding: 12px 25px;
+      font-size: 1em;
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      margin-top: 20px;
+      display: block;
+      margin: 20px auto 0;
     }
     button:hover {
       background-color: #1a242f;
@@ -147,20 +156,20 @@
         <label>Project Title / Short Description:</label>
         <input type="text" name="project_title" required />
         <label>Date of Review:</label>
-        <input type="date" name="review_date" required />
+        <input type="date" name="review_date" required style="font-style: italic;" />
         <label>Engineer Name:</label>
         <input type="text" name="engineer_name" required />
       </fieldset>
 
       <fieldset>
         <legend>Proposed Solution</legend>
-        <textarea class="bulleted" name="proposed_solution" rows="5" placeholder="• Describe solution here..." required></textarea>
+        <textarea class="bulleted" name="proposed_solution" rows="5" placeholder="• Use Make.com to fetch order data from Shopify every 15 minutes.&#10;• Automatically send the data to Google Sheets for reporting." required></textarea>
       </fieldset>
 
       <fieldset>
         <legend>Workflow Steps</legend>
-        <textarea class="bulleted" name="workflow_steps" rows="5" placeholder="• Describe steps here..." required></textarea>
-        <label>Upload Process Diagram:</label>
+        <textarea class="bulleted" name="workflow_steps" rows="6" placeholder="• Trigger: New row added in Google Sheets&#10;• Action: Extract customer name, send WhatsApp message&#10;• Log data in Airtable" required></textarea>
+        <label>Upload Process Diagram (if available):</label>
         <input type="file" name="workflow_image" accept="image/*" />
       </fieldset>
 
@@ -182,7 +191,7 @@
             </tr>
           </tbody>
         </table>
-        <button type="button" onclick="addAppRow()">➕ Add Row</button>
+        <button type="button" onclick="addAppRow()" style="margin-top: 10px;">➕ Add Row</button>
       </fieldset>
 
       <fieldset>
@@ -204,12 +213,12 @@
 
       <fieldset>
         <legend>Non-Feasible Components & Workarounds</legend>
-        <textarea class="bulleted" name="non_feasible_components" rows="5" placeholder="• Optional info here..."></textarea>
+        <textarea class="bulleted" name="non_feasible_components" rows="5" placeholder="• WhatsApp Business API requires official number — not feasible without approval.&#10;• Workaround: Use Twilio SMS for now."></textarea>
       </fieldset>
 
       <fieldset>
         <legend>Assumptions & Clarifications Needed</legend>
-        <textarea class="bulleted" name="assumptions" rows="5" placeholder="• List assumptions here..."></textarea>
+        <textarea class="bulleted" name="assumptions" rows="5" placeholder="• Assume client has admin access to Gmail and Tally.&#10;• Clarify whether all orders need to be synced or only paid ones."></textarea>
       </fieldset>
 
       <fieldset>
@@ -219,7 +228,7 @@
 
       <fieldset>
         <legend>What We Need From the Client</legend>
-        <textarea class="bulleted" name="client_requirements" rows="5" placeholder="• List client needs..." required></textarea>
+        <textarea class="bulleted" name="client_requirements" rows="5" placeholder="• Admin access to Make.com (admin@clientdomain.com)&#10;• API credentials for Zoho, Shopify&#10;• Approval on proposed fallback options" required></textarea>
       </fieldset>
 
       <button type="submit">Submit Feasibility Form</button>
@@ -244,53 +253,65 @@
     refInput.addEventListener('paste', e => e.preventDefault());
 
     function addAppRow() {
-      const table = document.querySelector('#appsTable tbody');
-      const row = table.insertRow();
-      ['app_service[]', 'available_on[]', 'plan_required[]'].forEach(name => {
-        const cell = row.insertCell();
+      const table = document.getElementById('appsTable').getElementsByTagName('tbody')[0];
+      const newRow = table.insertRow();
+      for (let i = 0; i < 3; i++) {
+        const cell = newRow.insertCell();
         const input = document.createElement('input');
         input.type = 'text';
-        input.name = name;
+        input.name = ["app_service[]", "available_on[]", "plan_required[]"][i];
         cell.appendChild(input);
-      });
+      }
     }
 
     document.querySelectorAll('.bulleted').forEach(textarea => {
       textarea.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') {
           e.preventDefault();
-          const cursor = this.selectionStart;
+          const cursorPos = this.selectionStart;
           const value = this.value;
-          this.value = value.slice(0, cursor) + '\n• ' + value.slice(cursor);
-          this.selectionStart = this.selectionEnd = cursor + 3;
+          const before = value.substring(0, cursorPos);
+          const after = value.substring(cursorPos);
+          this.value = before + '\n\u2022 ' + after;
+          this.selectionStart = this.selectionEnd = cursorPos + 3;
         }
       });
 
       textarea.addEventListener('focus', function () {
-        if (this.value.trim() === '') this.value = '• ';
+        if (this.value.trim() === '') {
+          this.value = '\u2022 ';
+        }
       });
     });
 
     document.getElementById('feasibilityForm').addEventListener('submit', function (e) {
       e.preventDefault();
 
-      const formData = new FormData(this);
       const refValue = refInput.value.trim();
+      const numberPart = refValue.split('-').pop();
       const refPattern = /^MSQ-\d{4}-\d{3}$/;
 
-      if (!refPattern.test(refValue)) {
-        alert('Reference number must be in the format MSQ-YYMM-###');
+      if (!/^\d+$/.test(numberPart) || !refPattern.test(refValue)) {
+        alert('Reference number must be in the format MSQ-YYMM-### (numbers only).');
+        refInput.focus();
         return;
       }
 
-      formData.set("reference_number", refValue);
+      const form = this;
+      const formData = new FormData(form);
 
-      // Convert app rows into nested collections
+      // Clear legacy flat fields
+      formData.delete("app_service[]");
+      formData.delete("available_on[]");
+      formData.delete("plan_required[]");
+
+      // Format collections correctly
       const rows = document.querySelectorAll('#appsTable tbody tr');
       rows.forEach((row, i) => {
         const app = row.querySelector('input[name="app_service[]"]').value.trim();
         const available = row.querySelector('input[name="available_on[]"]').value.trim();
         const plan = row.querySelector('input[name="plan_required[]"]').value.trim();
+
         if (app || available || plan) {
           formData.append(`apps_services[${i}][app_service]`, app);
           formData.append(`apps_services[${i}][available_on]`, available);
@@ -298,13 +319,16 @@
         }
       });
 
+      formData.set("reference_number", refValue);
+
       fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
         method: "POST",
         body: formData
-      }).then(res => {
+      })
+      .then(res => {
         if (res.ok) {
-          document.querySelector(".container").innerHTML = `
-            <div style="text-align:center; padding: 60px;">
+          document.querySelector(".container").innerHTML = 
+            `<div style="text-align: center; padding: 60px;">
               <h2 style="color: green;">✅ Submitted!</h2>
               <p>Your Engineering Feasibility Review has been submitted.</p>
               <a href="" style="display:inline-block; margin-top: 25px; padding: 12px 24px; background-color: #2c3e50; color: white; border-radius: 8px; text-decoration: none;">
@@ -314,7 +338,8 @@
         } else {
           alert("Submission failed. Please try again.");
         }
-      }).catch(err => alert("Error: " + err.message));
+      })
+      .catch(err => alert("Error: " + err.message));
     });
   </script>
 </body>
