@@ -305,35 +305,24 @@
         return;
       }
 
-
       const form = this;
       const formData = new FormData(form);
 
-      const appsTable = document.querySelectorAll('#appsTable tbody tr');
-      const apps = [];
-
-      appsTable.forEach(row => {
+      const rows = document.querySelectorAll('#appsTable tbody tr');
+      rows.forEach((row, index) => {
         const app = row.querySelector('input[name="app_service[]"]').value.trim();
         const available = row.querySelector('input[name="available_on[]"]').value.trim();
         const plan = row.querySelector('input[name="plan_required[]"]').value.trim();
+
         if (app || available || plan) {
-          apps.push({ app_service: app, available_on: available, plan_required: plan });
+          formData.append(apps_services[${index}][app_service], app);
+          formData.append(apps_services[${index}][available_on], available);
+          formData.append(apps_services[${index}][plan_required], plan);
         }
       });
-
-      const data = {};
-      formData.forEach((value, key) => {
-        if (data[key]) {
-          if (!Array.isArray(data[key])) data[key] = [data[key]];
-          data[key].push(value);
-        } else {
-          data[key] = value;
-        }
-      });
-
-      data.apps_services = apps;
 
       formData.set("reference_number", refValue);
+
       fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
         method: "POST",
         body: formData
