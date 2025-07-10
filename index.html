@@ -14,6 +14,7 @@
     ::placeholder {
       font-style: italic;
       font-size: 1em;
+      font-weight: normal;
     }
     .container {
       max-width: 900px;
@@ -59,7 +60,7 @@
     textarea {
       resize: vertical;
       white-space: pre-line;
-      font-family: inherit;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-weight: 500;
     }
     .reference-number-below {
@@ -163,12 +164,15 @@
 
       <fieldset>
         <legend>Proposed Solution</legend>
-        <textarea class="bulleted" name="proposed_solution" rows="5" placeholder="• Use Make.com to fetch order data from Shopify every 15 minutes.&#10;• Automatically send the data to Google Sheets for reporting." required></textarea>
+        <textarea class="bulleted" name="proposed_solution" rows="5" placeholder="• Use Make.com to fetch order data from Shopify every 15 minutes.
+• Automatically send the data to Google Sheets for reporting." required></textarea>
       </fieldset>
 
       <fieldset>
         <legend>Workflow Steps</legend>
-        <textarea class="bulleted" name="workflow_steps" rows="6" placeholder="• Trigger: New row added in Google Sheets&#10;• Action: Extract customer name, send WhatsApp message&#10;• Log data in Airtable" required></textarea>
+        <textarea class="bulleted" name="workflow_steps" rows="6" placeholder="• Trigger: New row added in Google Sheets
+• Action: Extract customer name, send WhatsApp message
+• Log data in Airtable" required></textarea>
         <label>Upload Process Diagram (if available):</label>
         <input type="file" name="workflow_image" accept="image/*" />
       </fieldset>
@@ -213,12 +217,14 @@
 
       <fieldset>
         <legend>Non-Feasible Components & Workarounds</legend>
-        <textarea class="bulleted" name="non_feasible_components" rows="5" placeholder="• WhatsApp Business API requires official number — not feasible without approval.&#10;• Workaround: Use Twilio SMS for now."></textarea>
+        <textarea class="bulleted" name="non_feasible_components" rows="5" placeholder="• WhatsApp Business API requires official number — not feasible without approval.
+• Workaround: Use Twilio SMS for now."></textarea>
       </fieldset>
 
       <fieldset>
         <legend>Assumptions & Clarifications Needed</legend>
-        <textarea class="bulleted" name="assumptions" rows="5" placeholder="• Assume client has admin access to Gmail and Tally.&#10;• Clarify whether all orders need to be synced or only paid ones."></textarea>
+        <textarea class="bulleted" name="assumptions" rows="5" placeholder="• Assume client has admin access to Gmail and Tally.
+• Clarify whether all orders need to be synced or only paid ones."></textarea>
       </fieldset>
 
       <fieldset>
@@ -228,7 +234,9 @@
 
       <fieldset>
         <legend>What We Need From the Client</legend>
-        <textarea class="bulleted" name="client_requirements" rows="5" placeholder="• Admin access to Make.com (admin@clientdomain.com)&#10;• API credentials for Zoho, Shopify&#10;• Approval on proposed fallback options" required></textarea>
+        <textarea class="bulleted" name="client_requirements" rows="5" placeholder="• Admin access to Make.com (admin@clientdomain.com)
+• API credentials for Zoho, Shopify
+• Approval on proposed fallback options" required></textarea>
       </fieldset>
 
       <button type="submit">Submit Feasibility Form</button>
@@ -240,7 +248,7 @@
     const now = new Date();
     const year = now.getFullYear().toString().slice(-2);
     const month = String(now.getMonth() + 1).padStart(2, '0');
-    const dynamicPrefix = `MSQ-${year}${month}-`;
+    const dynamicPrefix = MSQ-${year}${month}-;
     refInput.value = dynamicPrefix;
     refInput.setAttribute("maxlength", dynamicPrefix.length + 3);
 
@@ -320,7 +328,6 @@
       });
 
       formData.set("reference_number", refValue);
-
       fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
         method: "POST",
         body: formData
@@ -328,13 +335,13 @@
       .then(res => {
         if (res.ok) {
           document.querySelector(".container").innerHTML = 
-            `<div style="text-align: center; padding: 60px;">
+            <div style="text-align: center; padding: 60px;">
               <h2 style="color: green;">✅ Submitted!</h2>
               <p>Your Engineering Feasibility Review has been submitted.</p>
               <a href="" style="display:inline-block; margin-top: 25px; padding: 12px 24px; background-color: #2c3e50; color: white; border-radius: 8px; text-decoration: none;">
                 Submit Another
               </a>
-            </div>`;
+            </div>;
         } else {
           alert("Submission failed. Please try again.");
         }
