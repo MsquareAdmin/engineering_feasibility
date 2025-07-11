@@ -144,31 +144,31 @@
   <div class="container">
     <h2>Engineering Feasibility Review</h2>
     <div class="reference-number-below">
-      <label for="reference_number">Reference Number:</label>
-      <input type="text" id="reference_number" name="reference_number" placeholder="MSQ-YYMM-###" />
+      <label for="reference_number">Reference Number:<span style="color: red;">*</span></label>
+      <input type="text" id="reference_number" name="reference_number" required placeholder="MSQ-YYMM-###" />
     </div>
 
       <form id="feasibilityForm">
       <fieldset>
         <legend>Project Reference</legend>
-        <label>Client Name:</label>
+        <label>Client Name:<span style="color: red;">*</span></label>
         <input type="text" name="client_name" required />
-        <label>Project Title / Short Description:</label>
+        <label>Project Title / Short Description:<span style="color: red;">*</span></label>
         <input type="text" name="project_title" required />
-        <label>Date of Review:</label>
+        <label>Date of Review:<span style="color: red;">*</span></label>
         <input type="date" name="review_date" required style="font-style: italic;" />
-        <label>Engineer Name:</label>
+        <label>Engineer Name:<span style="color: red;">*</span></label>
         <input type="text" name="engineer_name" required />
       </fieldset>
 
       <fieldset>
-        <legend>Proposed Solution</legend>
+        <legend>Proposed Solution<span style="color: red;">*</span></legend>
         <textarea class="bulleted" name="proposed_solution" rows="5" placeholder="• Use Make.com to fetch order data from Shopify every 15 minutes.
 • Automatically send the data to Google Sheets for reporting." required></textarea>
       </fieldset>
 
       <fieldset>
-        <legend>Workflow Steps</legend>
+        <legend>Workflow Steps<span style="color: red;">*</span></legend>
         <textarea class="bulleted" name="workflow_steps" rows="6" placeholder="• Trigger: New row added in Google Sheets
 • Action: Extract customer name, send WhatsApp message
 • Log data in Airtable" required></textarea>
@@ -198,12 +198,12 @@
       </fieldset>
 
       <fieldset>
-        <legend>Estimated Ballpark (in Hours)</legend>
+        <legend>Estimated Ballpark (in Hours)<span style="color: red;">*</span></legend>
         <input type="text" name="estimated_hours" placeholder="e.g., 12" required />
       </fieldset>
 
       <fieldset>
-        <legend>Estimated Execution Complexity</legend>
+        <legend>Estimated Execution Complexity<span style="color: red;">*</span></legend>
         <div class="priority-buttons">
           <input type="radio" id="complexity-high" name="complexity" value="High" hidden required>
           <label for="complexity-high" class="priority-btn">🔴 High</label>
@@ -232,7 +232,7 @@
       </fieldset>
 
       <fieldset>
-        <legend>What We Need From the Client</legend>
+        <legend>What We Need From the Client<span style="color: red;">*</span></legend>
         <textarea class="bulleted" name="client_requirements" rows="5" placeholder="• Admin access to Make.com (admin@clientdomain.com)
 • API credentials for Zoho, Shopify
 • Approval on proposed fallback options" required></textarea>
