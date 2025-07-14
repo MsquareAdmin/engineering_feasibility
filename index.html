@@ -256,6 +256,19 @@
     }
   }
     document.addEventListener('DOMContentLoaded', function () {
+// Prefill values from URL
+const params = new URLSearchParams(window.location.search);
+params.forEach((value, key) => {
+  const field = document.querySelector(`[name="${key}"]`);
+  if (field) {
+    if (field.type === 'radio') {
+      const radioOption = document.querySelector(`input[name="${key}"][value="${value}"]`);
+      if (radioOption) radioOption.checked = true;
+    } else {
+      field.value = value;
+    }
+  }
+});
       const refInput = document.getElementById('reference_number');
       const now = new Date();
       const year = now.getFullYear().toString().slice(-2);
