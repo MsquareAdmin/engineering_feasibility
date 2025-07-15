@@ -152,13 +152,13 @@
       <fieldset>
         <legend>Project Reference</legend>
         <label>Client Name:<span style="color: red;">*</span></label>
-        <input type="text" name="client_name" id="clientname" required />
+        <input type="text" name="client_name" required />
         <label>Project Title / Short Description:<span style="color: red;">*</span></label>
         <input type="text" name="project_title" required />
         <label>Date of Review:<span style="color: red;">*</span></label>
-        <input type="date" name="review_date" required style="font-style: italic;" />
+        <input type="date" name="review_date" required />
         <label>Engineer Name:<span style="color: red;">*</span></label>
-        <input type="text" id="engineer_name" name="engineer_name" required />
+        <input type="text" name="engineer_name" required />
       </fieldset>
 
       <fieldset>
@@ -185,9 +185,9 @@
           </thead>
           <tbody>
             <tr>
-              <td><input type="text" name="app_service[]" /></td>
-              <td><input type="text" name="available_on[]" /></td>
-              <td><input type="text" name="plan_required[]" /></td>
+              <td><input type="text" name="app_service[]"></td>
+              <td><input type="text" name="available_on[]"></td>
+              <td><input type="text" name="plan_required[]"></td>
             </tr>
           </tbody>
         </table>
@@ -249,7 +249,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-      // Prefill values from URL
       const params = new URLSearchParams(window.location.search);
       params.forEach((value, key) => {
         const field = document.querySelector(`[name="${key}"]`);
@@ -263,9 +262,10 @@
         }
       });
 
+      const form = document.getElementById('feasibilityForm');
       const refInput = document.getElementById('reference_number');
 
-      document.getElementById('feasibilityForm').addEventListener('submit', function (e) {
+      form.addEventListener('submit', function (e) {
         e.preventDefault();
 
         const refValue = refInput.value.trim();
@@ -278,44 +278,22 @@
           return;
         }
 
-        const formData = new FormData(this);
+        const formData = new FormData(form);
         const rows = document.querySelectorAll('#appsTable tbody tr');
-        const apps_services = [];
-
         rows.forEach(row => {
           const app = row.querySelector('input[name="app_service[]"]').value.trim();
           const available = row.querySelector('input[name="available_on[]"]').value.trim();
           const plan = row.querySelector('input[name="plan_required[]"]').value.trim();
           if (app || available || plan) {
-            apps_services.push({
-              app_service: app,
-              available_on: available,
-              plan_required: plan
-            });
+            formData.append('app_service[]', app);
+            formData.append('available_on[]', available);
+            formData.append('plan_required[]', plan);
           }
         });
-
-        const data = {};
-        formData.forEach((value, key) => {
-          if (!["app_service[]", "available_on[]", "plan_required[]"].includes(key)) {
-            if (data[key]) {
-              if (!Array.isArray(data[key])) data[key] = [data[key]];
-              data[key].push(value);
-            } else {
-              data[key] = value;
-            }
-          }
-        });
-
-        data.apps_services = apps_services;
-        data.reference_number = refValue;
 
         fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data)
+          body: formData
         })
         .then(res => {
           if (res.ok) {
