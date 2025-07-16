@@ -148,7 +148,7 @@
       <input type="text" id="reference_number" name="reference_number" required placeholder="MSQ-YYMM-###" />
     </div>
 
-    <form id="feasibilityForm">
+      <form id="feasibilityForm">
       <fieldset>
         <legend>Project Reference</legend>
         <label>Client Name:<span style="color: red;">*</span></label>
@@ -158,17 +158,20 @@
         <label>Date of Review:<span style="color: red;">*</span></label>
         <input type="date" name="review_date" required style="font-style: italic;" />
         <label>Engineer Name:<span style="color: red;">*</span></label>
-        <input type="text" id="engineer_name" name="engineer_name" required />
+        <input type="text" name="engineer_name" required />
       </fieldset>
 
       <fieldset>
         <legend>Proposed Solution<span style="color: red;">*</span></legend>
-        <textarea class="bulleted" name="proposed_solution" rows="5" required></textarea>
+        <textarea class="bulleted" name="proposed_solution" rows="5" placeholder="• Use Make.com to fetch order data from Shopify every 15 minutes.
+• Automatically send the data to Google Sheets for reporting." required></textarea>
       </fieldset>
 
       <fieldset>
         <legend>Workflow Steps<span style="color: red;">*</span></legend>
-        <textarea class="bulleted" name="workflow_steps" rows="6" required></textarea>
+        <textarea class="bulleted" name="workflow_steps" rows="6" placeholder="• Trigger: New row added in Google Sheets
+• Action: Extract customer name, send WhatsApp message
+• Log data in Airtable" required></textarea>
         <label>Upload Process Diagram (if available):</label>
         <input type="file" name="workflow_image" accept="image/*" />
       </fieldset>
@@ -196,7 +199,7 @@
 
       <fieldset>
         <legend>Estimated Ballpark (in Hours)<span style="color: red;">*</span></legend>
-        <input type="text" name="estimated_hours" required />
+        <input type="text" name="estimated_hours" placeholder="e.g., 12" required />
       </fieldset>
 
       <fieldset>
@@ -213,22 +216,26 @@
 
       <fieldset>
         <legend>Non-Feasible Components & Workarounds</legend>
-        <textarea class="bulleted" name="non_feasible_components" rows="5"></textarea>
+        <textarea class="bulleted" name="non_feasible_components" rows="5" placeholder="• WhatsApp Business API requires official number — not feasible without approval.
+• Workaround: Use Twilio SMS for now."></textarea>
       </fieldset>
 
       <fieldset>
         <legend>Assumptions & Clarifications Needed</legend>
-        <textarea class="bulleted" name="assumptions" rows="5"></textarea>
+        <textarea class="bulleted" name="assumptions" rows="5" placeholder="• Assume client has admin access to Gmail and Tally.
+• Clarify whether all orders need to be synced or only paid ones."></textarea>
       </fieldset>
 
       <fieldset>
         <legend>Proposed Delivery Time</legend>
-        <input type="text" name="delivery_time" />
+        <input type="text" name="delivery_time" placeholder="e.g., 5 working days" />
       </fieldset>
 
       <fieldset>
         <legend>What We Need From the Client<span style="color: red;">*</span></legend>
-        <textarea class="bulleted" name="client_requirements" rows="5" required></textarea>
+        <textarea class="bulleted" name="client_requirements" rows="5" placeholder="• Admin access to Make.com (admin@clientdomain.com)
+• API credentials for Zoho, Shopify
+• Approval on proposed fallback options" required></textarea>
       </fieldset>
 
       <button type="submit">Submit Feasibility Form</button>
@@ -236,95 +243,104 @@
   </div>
 
   <script>
-    function addAppRow() {
-      const table = document.getElementById('appsTable').getElementsByTagName('tbody')[0];
-      const newRow = table.insertRow();
-      for (let i = 0; i < 3; i++) {
-        const cell = newRow.insertCell();
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.name = ["app_service[]", "available_on[]", "plan_required[]"][i];
-        cell.appendChild(input);
-      }
-    }
 
+      function addAppRow() {
+    const table = document.getElementById('appsTable').getElementsByTagName('tbody')[0];
+    const newRow = table.insertRow();
+    for (let i = 0; i < 3; i++) {
+      const cell = newRow.insertCell();
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.name = ["app_service[]", "available_on[]", "plan_required[]"][i];
+      cell.appendChild(input);
+    }
+  }
     document.addEventListener('DOMContentLoaded', function () {
-      // Prefill values from URL
-      const params = new URLSearchParams(window.location.search);
-      params.forEach((value, key) => {
-        const field = document.querySelector(`[name="${key}"]`);
-        if (field) {
-          if (field.type === 'radio') {
-            const radioOption = document.querySelector(`input[name="${key}"][value="${value}"]`);
-            if (radioOption) radioOption.checked = true;
-          } else {
-            field.value = value;
-          }
+      const refInput = document.getElementById('reference_number');
+      const now = new Date();
+      const year = now.getFullYear().toString().slice(-2);
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const dynamicPrefix = `MSQ-${year}${month}-`;
+      refInput.value = dynamicPrefix;
+      refInput.setAttribute("maxlength", dynamicPrefix.length + 3);
+
+      refInput.addEventListener('keydown', function (e) {
+        const prefixLength = dynamicPrefix.length;
+        if (this.selectionStart < prefixLength || 
+            (e.key === 'Backspace' && this.selectionStart <= prefixLength)) {
+          e.preventDefault();
         }
       });
+      refInput.addEventListener('paste', e => e.preventDefault());
 
-      const refInput = document.getElementById('reference_number');
+      document.getElementById('feasibilityForm').addEventListener('submit', function (e) {
+        e.preventDefault();
 
-document.getElementById('feasibilityForm').addEventListener('submit', function (e) {
-  e.preventDefault();
+        const refValue = refInput.value.trim();
+        const numberPart = refValue.split('-').pop();
+        const refPattern = /^MSQ-\d{4}-\d{3}$/;
 
-  const refValue = refInput.value.trim();
-  const numberPart = refValue.split('-').pop();
-  const refPattern = /^MSQ-\d{4}-\d{3}$/;
+        if (!/^\d+$/.test(numberPart) || !refPattern.test(refValue)) {
+          alert('Reference number must be in the format MSQ-YYMM-### (numbers only).');
+          refInput.focus();
+          return;
+        }
 
-  if (!/^\d+$/.test(numberPart) || !refPattern.test(refValue)) {
-    alert('Reference number must be in the format MSQ-YYMM-### (numbers only).');
-    refInput.focus();
-    return;
-  }
+        const formData = new FormData(this);
+        const rows = document.querySelectorAll('#appsTable tbody tr');
+        const apps_services = [];
 
-  const formData = new FormData(this);
-  formData.set("reference_number", refValue); // overwrite with trimmed value
+        rows.forEach(row => {
+          const app = row.querySelector('input[name="app_service[]"]').value.trim();
+          const available = row.querySelector('input[name="available_on[]"]').value.trim();
+          const plan = row.querySelector('input[name="plan_required[]"]').value.trim();
+          if (app || available || plan) {
+            apps_services.push({
+              app_service: app,
+              available_on: available,
+              plan_required: plan
+            });
+          }
+        });
 
-  const rows = document.querySelectorAll('#appsTable tbody tr');
-  const apps_services = [];
+        const data = {};
+        formData.forEach((value, key) => {
+          if (!["app_service[]", "available_on[]", "plan_required[]"].includes(key)) {
+            if (data[key]) {
+              if (!Array.isArray(data[key])) data[key] = [data[key]];
+              data[key].push(value);
+            } else {
+              data[key] = value;
+            }
+          }
+        });
 
-  rows.forEach(row => {
-    const app = row.querySelector('input[name="app_service[]"]').value.trim();
-    const available = row.querySelector('input[name="available_on[]"]').value.trim();
-    const plan = row.querySelector('input[name="plan_required[]"]').value.trim();
-    if (app || available || plan) {
-      apps_services.push({
-        app_service: app,
-        available_on: available,
-        plan_required: plan
+        data.apps_services = apps_services;
+        data.reference_number = refValue;
+
+        fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        })
+        .then(res => {
+          if (res.ok) {
+            document.querySelector(".container").innerHTML = `
+              <div style="text-align: center; padding: 60px;">
+                <h2 style="color: green;">✅ Submitted!</h2>
+                <p>Your Engineering Feasibility Review has been submitted.</p>
+                <a href="" style="display:inline-block; margin-top: 25px; padding: 12px 24px; background-color: #2c3e50; color: white; border-radius: 8px; text-decoration: none;">
+                  Submit Another
+                </a>
+              </div>`;
+          } else {
+            alert("Submission failed. Please try again.");
+          }
+        })
+        .catch(err => alert("Error: " + err.message));
       });
-    }
-  });
-
-  apps_services.forEach((row, index) => {
-  formData.append(`apps_services[${index}][app_service]`, row.app_service);
-  formData.append(`apps_services[${index}][available_on]`, row.available_on);
-  formData.append(`apps_services[${index}][plan_required]`, row.plan_required);
-});
- // Add array as JSON string
-
-  fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
-    method: "POST",
-    body: formData
-  })
-  .then(res => {
-    if (res.ok) {
-      document.querySelector(".container").innerHTML = `
-        <div style="text-align: center; padding: 60px;">
-          <h2 style="color: green;">✅ Submitted!</h2>
-          <p>Your Engineering Feasibility Review has been submitted.</p>
-          <a href="" style="display:inline-block; margin-top: 25px; padding: 12px 24px; background-color: #2c3e50; color: white; border-radius: 8px; text-decoration: none;">
-            Submit Another
-          </a>
-        </div>`;
-    } else {
-      alert("Submission failed. Please try again.");
-    }
-  })
-  .catch(err => alert("Error: " + err.message));
-});
-
     });
   </script>
 </body>
