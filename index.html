@@ -271,12 +271,7 @@ params.forEach((value, key) => {
 });
       const refInput = document.getElementById('reference_number');
       const now = new Date();
-      const year = now.getFullYear().toString().slice(-2);
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const dynamicPrefix = `MSQ-${year}${month}-`;
-      refInput.value = dynamicPrefix;
-      refInput.setAttribute("maxlength", dynamicPrefix.length + 3);
-
+      
       refInput.addEventListener('keydown', function (e) {
         const prefixLength = dynamicPrefix.length;
         if (this.selectionStart < prefixLength || 
@@ -290,14 +285,7 @@ params.forEach((value, key) => {
         e.preventDefault();
 
         const refValue = refInput.value.trim();
-        const numberPart = refValue.split('-').pop();
-        const refPattern = /^MSQ-\d{4}-\d{3}$/;
-
-        if (!/^\d+$/.test(numberPart) || !refPattern.test(refValue)) {
-          alert('Reference number must be in the format MSQ-YYMM-### (numbers only).');
-          refInput.focus();
-          return;
-        }
+        
 
         const formData = new FormData(this);
         const rows = document.querySelectorAll('#appsTable tbody tr');
