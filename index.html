@@ -297,7 +297,12 @@ document.getElementById('feasibilityForm').addEventListener('submit', function (
     }
   });
 
-  formData.append("apps_services_json", JSON.stringify(apps_services)); // Add array as JSON string
+  apps_services.forEach((row, index) => {
+  formData.append(`apps_services[${index}][app_service]`, row.app_service);
+  formData.append(`apps_services[${index}][available_on]`, row.available_on);
+  formData.append(`apps_services[${index}][plan_required]`, row.plan_required);
+});
+ // Add array as JSON string
 
   fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
     method: "POST",
