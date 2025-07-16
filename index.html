@@ -311,25 +311,13 @@ const imageFile = formData.get("workflow_image");
         data.apps_services = apps_services;
         data.reference_number = refValue;
 
-if (imageFile && imageFile.size > 0) {
-  const reader = new FileReader();
-  reader.onloadend = function () {
-    data.workflow_image_base64 = reader.result; // includes base64 string with mime type
-    sendData(data);
-  };
-  reader.readAsDataURL(imageFile);
-} else {
-  sendData(data);
-}
-
-function sendData(data) {
-  fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  })
+fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(data)
+})
   .then(res => {
     if (res.ok) {
       document.querySelector(".container").innerHTML = `
