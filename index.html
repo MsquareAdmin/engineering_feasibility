@@ -11,11 +11,6 @@
       margin: 0;
       padding: 20px;
     }
-    ::placeholder {
-      font-style: italic;
-      font-size: 1em;
-      font-weight: normal;
-    }
     .container {
       max-width: 900px;
       margin: auto;
@@ -57,60 +52,6 @@
       font-size: 1em;
       box-sizing: border-box;
     }
-    textarea {
-      resize: vertical;
-      white-space: pre-line;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-weight: 500;
-    }
-    .reference-number-below {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 25px;
-    }
-    .reference-number-below label {
-      font-weight: bold;
-      font-size: 0.9em;
-      margin-right: 5px;
-    }
-    .reference-number-below input {
-      width: 160px;
-      padding: 6px 10px;
-      font-size: 0.9em;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    .priority-buttons {
-      display: flex;
-      gap: 15px;
-      margin-top: 10px;
-    }
-    .priority-btn {
-      padding: 8px 14px;
-      border-radius: 20px;
-      border: 2px solid #ccc;
-      background-color: #f9f9f9;
-      color: #555;
-      font-weight: bold;
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.2s ease-in-out;
-    }
-    #complexity-high:checked + label {
-      background-color: #ffe6e6;
-      color: #b30000;
-      border-color: #b30000;
-    }
-    #complexity-medium:checked + label {
-      background-color: #fff6cc;
-      color: #b38f00;
-      border-color: #b38f00;
-    }
-    #complexity-low:checked + label {
-      background-color: #f2f2f2;
-      color: #333;
-      border-color: #999;
-    }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -120,9 +61,6 @@
       border: 1px solid #ccc;
       padding: 8px;
       text-align: left;
-    }
-    th {
-      background-color: #f4f4f4;
     }
     button {
       background-color: #2c3e50;
@@ -143,37 +81,20 @@
 <body>
   <div class="container">
     <h2>Engineering Feasibility Review</h2>
-    <div class="reference-number-below">
-      <label for="reference_number">Reference Number:<span style="color: red;">*</span></label>
-      <input type="text" id="reference_number" name="reference_number" required placeholder="MSQ-YYMM-###" />
-    </div>
-
-      <form id="feasibilityForm">
+    <form id="feasibilityForm">
       <fieldset>
-        <legend>Project Reference</legend>
-        <label>Client Name:<span style="color: red;">*</span></label>
-        <input type="text" name="client_name" id="clientname" required />
-        <label>Project Title / Short Description:<span style="color: red;">*</span></label>
-        <input type="text" name="project_title" required />
-        <label>Date of Review:<span style="color: red;">*</span></label>
-        <input type="date" name="review_date" required style="font-style: italic;" />
-        <label>Engineer Name:<span style="color: red;">*</span></label>
+        <legend>Basic Info</legend>
+        <label>Reference Number:</label>
+        <input type="text" name="reference_number" required />
+
+        <label>Client Name:</label>
+        <input type="text" name="client_name" required />
+
+        <label>Engineer Name:</label>
         <input type="text" name="engineer_name" required />
-      </fieldset>
 
-      <fieldset>
-        <legend>Proposed Solution<span style="color: red;">*</span></legend>
-        <textarea class="bulleted" name="proposed_solution" rows="5" placeholder="• Use Make.com to fetch order data from Shopify every 15 minutes.
-• Automatically send the data to Google Sheets for reporting." required></textarea>
-      </fieldset>
-
-      <fieldset>
-        <legend>Workflow Steps<span style="color: red;">*</span></legend>
-        <textarea class="bulleted" name="workflow_steps" rows="6" placeholder="• Trigger: New row added in Google Sheets
-• Action: Extract customer name, send WhatsApp message
-• Log data in Airtable" required></textarea>
-        <label>Upload Process Diagram (if available):</label>
-        <input type="file" name="workflow_image" accept="image/*" />
+        <label>Review Date:</label>
+        <input type="date" name="review_date" required />
       </fieldset>
 
       <fieldset>
@@ -188,158 +109,110 @@
           </thead>
           <tbody>
             <tr>
-              <td><input type="text" name="app_service[]" /></td>
-              <td><input type="text" name="available_on[]" /></td>
-              <td><input type="text" name="plan_required[]" /></td>
+              <td><input type="text" name="app_service[]"></td>
+              <td><input type="text" name="available_on[]"></td>
+              <td><input type="text" name="plan_required[]"></td>
             </tr>
           </tbody>
         </table>
-        <button type="button" onclick="addAppRow()" style="margin-top: 10px;">➕ Add Row</button>
+        <button type="button" onclick="addAppRow()">➕ Add Row</button>
       </fieldset>
 
       <fieldset>
-        <legend>Estimated Ballpark (in Hours)<span style="color: red;">*</span></legend>
-        <input type="text" name="estimated_hours" placeholder="e.g., 12" required />
+        <legend>Upload Process Diagram</legend>
+        <input type="file" name="workflow_image" accept="image/*" />
       </fieldset>
 
-      <fieldset>
-        <legend>Estimated Execution Complexity<span style="color: red;">*</span></legend>
-        <div class="priority-buttons">
-          <input type="radio" id="complexity-high" name="complexity" value="High" hidden required>
-          <label for="complexity-high" class="priority-btn">🔴 High</label>
-          <input type="radio" id="complexity-medium" name="complexity" value="Medium" hidden>
-          <label for="complexity-medium" class="priority-btn">🟡 Medium</label>
-          <input type="radio" id="complexity-low" name="complexity" value="Low" hidden>
-          <label for="complexity-low" class="priority-btn">⚪ Low</label>
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>Non-Feasible Components & Workarounds</legend>
-        <textarea class="bulleted" name="non_feasible_components" rows="5" placeholder="• WhatsApp Business API requires official number — not feasible without approval.
-• Workaround: Use Twilio SMS for now."></textarea>
-      </fieldset>
-
-      <fieldset>
-        <legend>Assumptions & Clarifications Needed</legend>
-        <textarea class="bulleted" name="assumptions" rows="5" placeholder="• Assume client has admin access to Gmail and Tally.
-• Clarify whether all orders need to be synced or only paid ones."></textarea>
-      </fieldset>
-
-      <fieldset>
-        <legend>Proposed Delivery Time</legend>
-        <input type="text" name="delivery_time" placeholder="e.g., 5 working days" />
-      </fieldset>
-
-      <fieldset>
-        <legend>What We Need From the Client<span style="color: red;">*</span></legend>
-        <textarea class="bulleted" name="client_requirements" rows="5" placeholder="• Admin access to Make.com (admin@clientdomain.com)
-• API credentials for Zoho, Shopify
-• Approval on proposed fallback options" required></textarea>
-      </fieldset>
-
-      <button type="submit">Submit Feasibility Form</button>
+      <button type="submit">Submit</button>
     </form>
   </div>
 
   <script>
+    function addAppRow() {
+      const table = document.getElementById("appsTable").getElementsByTagName("tbody")[0];
+      const newRow = table.insertRow();
 
-      function addAppRow() {
-    const table = document.getElementById('appsTable').getElementsByTagName('tbody')[0];
-    const newRow = table.insertRow();
-    for (let i = 0; i < 3; i++) {
-      const cell = newRow.insertCell();
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.name = ["app_service[]", "available_on[]", "plan_required[]"][i];
-      cell.appendChild(input);
+      for (let i = 0; i < 3; i++) {
+        const cell = newRow.insertCell();
+        const input = document.createElement("input");
+        input.type = "text";
+        input.name = ["app_service[]", "available_on[]", "plan_required[]"][i];
+        cell.appendChild(input);
+      }
     }
-  }
-    document.addEventListener('DOMContentLoaded', function () {
-// Prefill values from URL
-const params = new URLSearchParams(window.location.search);
-params.forEach((value, key) => {
-  const field = document.querySelector(`[name="${key}"]`);
-  if (field) {
-    if (field.type === 'radio') {
-      const radioOption = document.querySelector(`input[name="${key}"][value="${value}"]`);
-      if (radioOption) radioOption.checked = true;
-    } else {
-      field.value = value;
-    }
-  }
-});
-      const refInput = document.getElementById('reference_number');
-      const now = new Date();
-      
-      refInput.addEventListener('keydown', function (e) {
-        const prefixLength = dynamicPrefix.length;
-        if (this.selectionStart < prefixLength || 
-            (e.key === 'Backspace' && this.selectionStart <= prefixLength)) {
-          e.preventDefault();
+
+    document.getElementById("feasibilityForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const form = this;
+      const formData = new FormData();
+
+      // Step 1: Collect raw form fields
+      const data = {};
+      const inputs = form.querySelectorAll("input[type=text], input[type=date]");
+      inputs.forEach(input => {
+        data[input.name] = input.value.trim();
+      });
+
+      // Step 2: Collect dynamic rows
+      const rows = document.querySelectorAll("#appsTable tbody tr");
+      const apps_services = [];
+      rows.forEach(row => {
+        const app = row.querySelector('input[name="app_service[]"]').value.trim();
+        const available = row.querySelector('input[name="available_on[]"]').value.trim();
+        const plan = row.querySelector('input[name="plan_required[]"]').value.trim();
+        if (app || available || plan) {
+          apps_services.push({
+            app_service: app,
+            available_on: available,
+            plan_required: plan
+          });
         }
       });
-      refInput.addEventListener('paste', e => e.preventDefault());
+      data.apps_services = apps_services;
 
-      document.getElementById('feasibilityForm').addEventListener('submit', function (e) {
-        e.preventDefault();
+      // Step 3: Handle file upload and base64
+      const imageInput = form.querySelector('input[name="workflow_image"]');
+      const imageFile = imageInput?.files?.[0];
 
-        const refValue = refInput.value.trim();
-        
+      if (imageFile) {
+        formData.append("workflow_image", imageFile); // raw file
 
-        const formData = new FormData(this);
-        const rows = document.querySelectorAll('#appsTable tbody tr');
-        const apps_services = [];
+        // Convert image to base64
+        const base64String = await toBase64(imageFile);
+        data.workflow_image_base64 = base64String;
+      }
 
-        rows.forEach(row => {
-          const app = row.querySelector('input[name="app_service[]"]').value.trim();
-          const available = row.querySelector('input[name="available_on[]"]').value.trim();
-          const plan = row.querySelector('input[name="plan_required[]"]').value.trim();
-          if (app || available || plan) {
-            apps_services.push({
-              app_service: app,
-              available_on: available,
-              plan_required: plan
-            });
-          }
-        });
+      // Step 4: Attach JSON blob
+      formData.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }));
 
-        const data = {};
-        formData.forEach((value, key) => {
-          if (!["app_service[]", "available_on[]", "plan_required[]"].includes(key)) {
-            if (data[key]) {
-              if (!Array.isArray(data[key])) data[key] = [data[key]];
-              data[key].push(value);
-            } else {
-              data[key] = value;
-            }
-          }
-        });
-
-        data.apps_services = apps_services;
-        data.reference_number = refValue;
-
-  fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
-    method: "POST",
-    body: formData
-  })
-        .then(res => {
-          if (res.ok) {
-            document.querySelector(".container").innerHTML = `
-              <div style="text-align: center; padding: 60px;">
-                <h2 style="color: green;">✅ Submitted!</h2>
-                <p>Your Engineering Feasibility Review has been submitted.</p>
-                <a href="" style="display:inline-block; margin-top: 25px; padding: 12px 24px; background-color: #2c3e50; color: white; border-radius: 8px; text-decoration: none;">
-                  Submit Another
-                </a>
-              </div>`;
-          } else {
-            alert("Submission failed. Please try again.");
-          }
-        })
-        .catch(err => alert("Error: " + err.message));
+      // Step 5: Send to Make.com webhook
+      fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
+        method: "POST",
+        body: formData
+      })
+      .then((res) => {
+        if (res.ok) {
+          alert("✅ Form submitted successfully!");
+          form.reset();
+        } else {
+          alert("❌ Submission failed. Try again.");
+        }
+      })
+      .catch((err) => {
+        alert("❌ Error: " + err.message);
       });
     });
+
+    // Helper: Convert file to base64
+    function toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result); // already includes `data:image/...` prefix
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+      });
+    }
   </script>
 </body>
 </html>
