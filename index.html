@@ -319,13 +319,10 @@ params.forEach((value, key) => {
         data.apps_services = apps_services;
         data.reference_number = refValue;
 
-        fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data)
-        })
+  fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
+    method: "POST",
+    body: formData
+  })
         .then(res => {
           if (res.ok) {
             document.querySelector(".container").innerHTML = `
