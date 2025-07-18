@@ -269,8 +269,9 @@ params.forEach((value, key) => {
     }
   }
 });
+      const refInput = document.getElementById('reference_number');
+      const now = new Date();
       
-
       refInput.addEventListener('keydown', function (e) {
         const prefixLength = dynamicPrefix.length;
         if (this.selectionStart < prefixLength || 
@@ -283,8 +284,8 @@ params.forEach((value, key) => {
       document.getElementById('feasibilityForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
-
-
+        const refValue = refInput.value.trim();
+        
 
         const formData = new FormData(this);
         const rows = document.querySelectorAll('#appsTable tbody tr');
@@ -318,13 +319,10 @@ params.forEach((value, key) => {
         data.apps_services = apps_services;
         data.reference_number = refValue;
 
-        fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data)
-        })
+  fetch("https://hook.eu1.make.com/xwxeuum2fp4gupusyq0kyp6idlk6msog", {
+    method: "POST",
+    body: formData
+  })
         .then(res => {
           if (res.ok) {
             document.querySelector(".container").innerHTML = `
