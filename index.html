@@ -254,7 +254,30 @@ function addAppRow() {
     cell.appendChild(input);
   }
 }
+// Bullet logic on focus and enter
+document.querySelectorAll('textarea.bulleted').forEach(textarea => {
+  // Add bullet when clicked if empty
+  textarea.addEventListener('focus', function () {
+    if (this.value.trim() === '') {
+      this.value = '• ';
+      this.setSelectionRange(this.value.length, this.value.length);
+    }
+  });
 
+  // Add bullet on Enter key
+  textarea.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const { selectionStart, selectionEnd, value } = this;
+      const before = value.substring(0, selectionStart);
+      const after = value.substring(selectionEnd);
+      const newText = `${before}\n• ${after}`;
+      this.value = newText;
+      const cursorPos = before.length + 3;
+      this.setSelectionRange(cursorPos, cursorPos);
+    }
+  });
+});
 document.addEventListener('DOMContentLoaded', function () {
   const params = new URLSearchParams(window.location.search);
   params.forEach((value, key) => {
