@@ -151,11 +151,8 @@
     <form id="feasibilityForm">
       <fieldset>
         <legend>Project Reference</legend>
-
-
         <label>Project Title / Short Description:<span style="color: red;">*</span></label>
         <input type="text" name="project_title" required />
-
 
         <label>Date of Review:<span style="color: red;">*</span></label>
         <input type="date" name="review_date" required style="font-style: italic;" />
@@ -175,31 +172,38 @@
         </select>
       </fieldset>
 
-<fieldset>
-  <legend>Feasibility Status<span style="color: red;">*</span></legend>
-  <label for="feasibility_status">Select Status:</label>
-  <select name="feasibility_status" id="feasibility_status" required onchange="toggleNonFeasibleField()">
-    <option value="" disabled selected>Select Status</option>
-    <option value="Feasible">Feasible</option>
-    <option value="Partially Feasible">Partially Feasible</option>
-    <option value="Non Feasible">Non Feasible</option>
-  </select>
+      <fieldset>
+        <legend>Feasibility Status<span style="color: red;">*</span></legend>
+        <label for="feasibility_status">Select Status:</label>
+        <select name="feasibility_status" id="feasibility_status" required onchange="toggleNonFeasibleField()">
+          <option value="" disabled selected>Select Status</option>
+          <option value="Feasible">Feasible</option>
+          <option value="Feasible with Workarounds">Feasible with Workarounds</option>
+          <option value="Partially Feasible">Partially Feasible</option>
+          <option value="Non Feasible">Non Feasible</option>
+        </select>
 
-  <!-- Partially Feasible Box -->
-  <div id="partialNonFeasibleField" style="display: none; margin-top: 20px;">
-    <label for="non_feasible_components">Non-Feasible Components & Workarounds:</label>
-    <textarea class="bulleted" name="non_feasible_components" rows="5" placeholder="• WhatsApp Business API requires official number — not feasible without approval.
+        <!-- Feasible with Workarounds Box -->
+        <div id="workaroundsField" style="display: none; margin-top: 20px;">
+          <label for="workarounds">Workarounds:</label>
+          <textarea class="bulleted" name="workarounds" rows="5" placeholder="• Use third-party API instead of native integration. 
+• Implement manual approval flow as a temporary solution."></textarea>
+        </div>
+
+        <!-- Partially Feasible Box -->
+        <div id="partialNonFeasibleField" style="display: none; margin-top: 20px;">
+          <label for="non_feasible_components">Non-Feasible Components & Workarounds:</label>
+          <textarea class="bulleted" name="non_feasible_components" rows="5" placeholder="• WhatsApp Business API requires official number — not feasible without approval.
 • Workaround: Use Twilio SMS for now."></textarea>
-  </div>
+        </div>
 
-  <!-- Non Feasible Box -->
-  <div id="whyNonFeasibleField" style="display: none; margin-top: 20px;">
-    <label for="why_non_feasible">Why Non-Feasible?</label>
-    <textarea class="bulleted" name="why_non_feasible" rows="6" placeholder="• WhatsApp Business API requires verified Facebook Business Manager, which client lacks.
+        <!-- Non Feasible Box -->
+        <div id="whyNonFeasibleField" style="display: none; margin-top: 20px;">
+          <label for="why_non_feasible">Why Non-Feasible?</label>
+          <textarea class="bulleted" name="why_non_feasible" rows="6" placeholder="• WhatsApp Business API requires verified Facebook Business Manager, which client lacks.
 • Shopify checkout flow cannot be customized to include external payment gateways due to platform restrictions."></textarea>
-  </div>
-</fieldset>
-
+        </div>
+      </fieldset>
 
       <fieldset>
         <legend>Proposed Solution<span style="color: red;">*</span></legend>
@@ -254,8 +258,6 @@
         </div>
       </fieldset>
 
-
-
       <fieldset>
         <legend>Assumptions & Clarifications Needed</legend>
         <textarea class="bulleted" name="assumptions" rows="5" placeholder="• Assume client has admin access to Gmail and Tally.
@@ -284,9 +286,11 @@ function toggleNonFeasibleField() {
 
   const partialField = document.getElementById('partialNonFeasibleField');
   const whyField = document.getElementById('whyNonFeasibleField');
+  const workaroundsField = document.getElementById('workaroundsField');
 
   partialField.style.display = (status === "Partially Feasible") ? "block" : "none";
   whyField.style.display = (status === "Non Feasible") ? "block" : "none";
+  workaroundsField.style.display = (status === "Feasible with Workarounds") ? "block" : "none";
 }
 
     function addAppRow() {
