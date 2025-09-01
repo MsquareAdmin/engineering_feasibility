@@ -180,27 +180,27 @@
           <option value="Feasible">Feasible</option>
           <option value="Feasible with Workarounds">Feasible with Workarounds</option>
           <option value="Partially Feasible">Partially Feasible</option>
-          <option value="Non Feasible">Non Feasible</option>
+          <option value="Not Feasible">Not Feasible</option>
         </select>
 
         <!-- Feasible with Workarounds Box -->
         <div id="workaroundsField" style="display: none; margin-top: 20px;">
-          <label for="workarounds">Workarounds:</label>
+          <label for="workarounds">Not-Feasible Components & Workarounds:</label>
           <textarea class="bulleted" name="workarounds" rows="5" placeholder="• Use third-party API instead of native integration. 
 • Implement manual approval flow as a temporary solution."></textarea>
         </div>
 
         <!-- Partially Feasible Box -->
         <div id="partialNonFeasibleField" style="display: none; margin-top: 20px;">
-          <label for="non_feasible_components">Non-Feasible Components & Workarounds:</label>
+          <label for="non_feasible_components">What is Not Feasible?:</label>
           <textarea class="bulleted" name="non_feasible_components" rows="5" placeholder="• WhatsApp Business API requires official number — not feasible without approval.
 • Workaround: Use Twilio SMS for now."></textarea>
         </div>
 
-        <!-- Non Feasible Box -->
-        <div id="whyNonFeasibleField" style="display: none; margin-top: 20px;">
-          <label for="why_non_feasible">Why Non-Feasible?</label>
-          <textarea class="bulleted" name="why_non_feasible" rows="6" placeholder="• WhatsApp Business API requires verified Facebook Business Manager, which client lacks.
+        <!-- Not Feasible Box -->
+        <div id="whyNotFeasibleField" style="display: none; margin-top: 20px;">
+          <label for="why_not_feasible">Why Not-Feasible?</label>
+          <textarea class="bulleted" name="why_not_feasible" rows="6" placeholder="• WhatsApp Business API requires verified Facebook Business Manager, which client lacks.
 • Shopify checkout flow cannot be customized to include external payment gateways due to platform restrictions."></textarea>
         </div>
       </fieldset>
@@ -226,7 +226,7 @@
           <thead>
             <tr>
               <th>App/Service</th>
-              <th>Available as Native</th>
+              <th>Available as Native (Yes/No)</th>
               <th>Plan Required</th>
             </tr>
           </thead>
@@ -271,9 +271,9 @@
 
       <fieldset>
         <legend>What We Need From the Client<span style="color: red;">*</span></legend>
-        <textarea class="bulleted" name="client_requirements" rows="5" placeholder="• Admin access to Make.com (admin@clientdomain.com)
+        <textarea class="bulleted" name="client_requirements" rows="5" placeholder="• Admin access to Make.com/n8n
 • API credentials for Zoho, Shopify
-• Approval on proposed fallback options" required></textarea>
+• Confirmation on proposal solutions" required></textarea>
       </fieldset>
 
       <button type="submit">Submit Feasibility Form</button>
@@ -281,17 +281,37 @@
   </div>
 
   <script>
-function toggleNonFeasibleField() {
-  const status = document.getElementById('feasibility_status').value;
-
-  const partialField = document.getElementById('partialNonFeasibleField');
-  const whyField = document.getElementById('whyNonFeasibleField');
-  const workaroundsField = document.getElementById('workaroundsField');
-
-  partialField.style.display = (status === "Partially Feasible") ? "block" : "none";
-  whyField.style.display = (status === "Non Feasible") ? "block" : "none";
-  workaroundsField.style.display = (status === "Feasible with Workarounds") ? "block" : "none";
-}
+    function toggleNonFeasibleField() {
+      const status = document.getElementById('feasibility_status').value;
+    
+      const partialField = document.getElementById('partialNonFeasibleField');
+      const whyField = document.getElementById('whyNotFeasibleField');
+      const workaroundsField = document.getElementById('workaroundsField');
+    
+      // Reset all conditional fields
+      partialField.style.display = "none";
+      whyField.style.display = "none";
+      workaroundsField.style.display = "none";
+    
+      // All fieldsets after Feasibility Status
+      const form = document.getElementById("feasibilityForm");
+      const allFieldsets = Array.from(form.querySelectorAll("fieldset"));
+      const statusFieldset = document.getElementById("feasibility_status").closest("fieldset");
+      const afterStatusFieldsets = allFieldsets.slice(allFieldsets.indexOf(statusFieldset) + 1);
+    
+      if (status === "Not Feasible") {
+        // Show only the Why Not-Feasible field
+        whyField.style.display = "block";
+        // Hide everything after Feasibility Status
+        afterStatusFieldsets.forEach(fs => fs.style.display = "none");
+      } else {
+        // Restore all other fieldsets
+        afterStatusFieldsets.forEach(fs => fs.style.display = "block");
+    
+        if (status === "Partially Feasible") partialField.style.display = "block";
+        if (status === "Feasible with Workarounds") workaroundsField.style.display = "block";
+      }
+    }
 
     function addAppRow() {
       const table = document.getElementById('appsTable').getElementsByTagName('tbody')[0];
