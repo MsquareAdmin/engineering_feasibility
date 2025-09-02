@@ -150,123 +150,143 @@
 
     <form id="feasibilityForm">
       <!-- Project Reference -->
-      <fieldset>
-        <legend>Project Reference</legend>
-        <label>Project Title / Short Description:<span style="color: red;">*</span></label>
-        <input type="text" name="project_title" required />
+<fieldset>
+  <legend>Project Reference</legend>
+  <label>Project Title / Short Description:<span style="color: red;">*</span></label>
+  <input type="text" name="project_title" required placeholder="Eg: Automated Report Generation for Sales Team" />
 
-        <label>Date of Review:<span style="color: red;">*</span></label>
-        <input type="date" name="review_date" required />
-        <label>Engineer Name:<span style="color: red;">*</span></label>
-        <select name="engineer_name" required>
-          <option value="" disabled selected>Select Engineer</option>
-          <option>Aashiya Bi</option>
-          <option>Adithya C P</option>
-          <option>Abhinav K M</option>
-          <option>Akash Vijay</option>
-          <option>Jahar</option>
-          <option>Fasil Mohamed</option>
-          <option>Mufeed</option>
-          <option>Muhammed Nafih</option>
-          <option>Nijas Ali H</option>
-          <option>Rajeev Ranjan</option>
-        </select>
-      </fieldset>
+  <label>Date of Review:<span style="color: red;">*</span></label>
+  <input type="date" name="review_date" required />
 
-      <!-- Feasibility Status -->
-      <fieldset>
-        <legend>Feasibility Status<span style="color: red;">*</span></legend>
-        <label for="feasibility_status">Select Status:</label>
-        <select name="feasibility_status" id="feasibility_status" required onchange="toggleNonFeasibleField()">
-          <option value="" disabled selected>Select Status</option>
-          <option value="Feasible">Feasible</option>
-          <option value="Feasible with Workarounds">Feasible with Workarounds</option>
-          <option value="Partially Feasible">Partially Feasible</option>
-          <option value="Not Feasible">Not Feasible</option>
-        </select>
+  <label>Engineer Name:<span style="color: red;">*</span></label>
+  <select name="engineer_name" required>
+    <option value="" disabled selected>Select Engineer</option>
+    <option>Aashiya Bi</option>
+    <option>Adithya C P</option>
+    <option>Abhinav K M</option>
+    <option>Akash Vijay</option>
+    <option>Jahar</option>
+    <option>Fasil Mohamed</option>
+    <option>Mufeed</option>
+    <option>Muhammed Nafih</option>
+    <option>Nijas Ali H</option>
+    <option>Rajeev Ranjan</option>
+  </select>
+</fieldset>
 
-        <div id="workaroundsField" style="display: none; margin-top: 20px;">
-          <label>Not-Feasible Components & Workarounds:</label>
-          <textarea class="bulleted" name="workarounds" rows="5"></textarea>
-        </div>
+<!-- Feasibility Status -->
+<fieldset>
+  <legend>Feasibility Status<span style="color: red;">*</span></legend>
+  <label for="feasibility_status">Select Status:</label>
+  <select name="feasibility_status" id="feasibility_status" required onchange="toggleNonFeasibleField()">
+    <option value="" disabled selected>Select Status</option>
+    <option value="Feasible">Feasible</option>
+    <option value="Feasible with Workarounds">Feasible with Workarounds</option>
+    <option value="Partially Feasible">Partially Feasible</option>
+    <option value="Not Feasible">Not Feasible</option>
+  </select>
 
-        <div id="partialNonFeasibleField" style="display: none; margin-top: 20px;">
-          <label>What is Not Feasible?:</label>
-          <textarea class="bulleted" name="non_feasible_components" rows="5"></textarea>
-        </div>
+  <div id="workaroundsField" style="display: none; margin-top: 20px;">
+    <label>Not-Feasible Components & Workarounds:</label>
+    <textarea class="bulleted" name="workarounds" rows="5" placeholder="• Component X not supported → Workaround: Use API instead
+• Limited integration with Y → Workaround: Manual sync once a week"></textarea>
+  </div>
 
-        <div id="whyNotFeasibleField" style="display: none; margin-top: 20px;">
-          <label>Why Not-Feasible?</label>
-          <textarea class="bulleted" name="why_not_feasible" rows="6"></textarea>
-        </div>
-      </fieldset>
+  <div id="partialNonFeasibleField" style="display: none; margin-top: 20px;">
+    <label>What is Not Feasible?:</label>
+    <textarea class="bulleted" name="non_feasible_components" rows="5" placeholder="• Direct export to SAP
+• Real-time sync across all regions"></textarea>
+  </div>
 
-      <!-- Other Sections -->
-      <fieldset>
-        <legend>Proposed Solution<span style="color: red;">*</span></legend>
-        <textarea class="bulleted" name="proposed_solution" rows="5" required></textarea>
-      </fieldset>
+  <div id="whyNotFeasibleField" style="display: none; margin-top: 20px;">
+    <label>Why Not-Feasible?</label>
+    <textarea class="bulleted" name="why_not_feasible" rows="6" placeholder="• Vendor does not provide required API
+• Security restrictions prevent automation
+• High dependency on manual approvals"></textarea>
+  </div>
+</fieldset>
 
-      <fieldset>
-        <legend>Workflow Steps<span style="color: red;">*</span></legend>
-        <textarea class="bulleted" name="workflow_steps" rows="6" required></textarea>
-        <label>Upload Process Diagram (if available):</label>
-        <input type="file" name="workflow_image" accept="image/*" />
-      </fieldset>
+<!-- Proposed Solution -->
+<fieldset>
+  <legend>Proposed Solution<span style="color: red;">*</span></legend>
+  <textarea class="bulleted" name="proposed_solution" rows="5" required placeholder="• Automate data collection using Zapier
+• Store reports in Google Drive
+• Notify stakeholders via Slack"></textarea>
+</fieldset>
 
-      <fieldset>
-        <legend>Apps/Services Involved</legend>
-        <table id="appsTable">
-          <thead>
-            <tr>
-              <th>App/Service</th>
-              <th>Available as Native (Yes/No)</th>
-              <th>Plan Required</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><input type="text" name="app_service[]" /></td>
-              <td><input type="text" name="available_on[]" /></td>
-              <td><input type="text" name="plan_required[]" /></td>
-            </tr>
-          </tbody>
-        </table>
-        <button type="button" onclick="addAppRow()">➕ Add Row</button>
-      </fieldset>
+<!-- Workflow Steps -->
+<fieldset>
+  <legend>Workflow Steps<span style="color: red;">*</span></legend>
+  <textarea class="bulleted" name="workflow_steps" rows="6" required placeholder="• Step 1: Collect input from Google Forms
+• Step 2: Transform data in Airtable
+• Step 3: Generate PDF using Make
+• Step 4: Email to client automatically"></textarea>
+  <label>Upload Process Diagram (if available):</label>
+  <input type="file" name="workflow_image" accept="image/*" />
+</fieldset>
 
-      <fieldset>
-        <legend>Estimated Ballpark (in Hours)<span style="color: red;">*</span></legend>
-        <input type="text" name="estimated_hours" required />
-      </fieldset>
+<!-- Apps/Services Involved -->
+<fieldset>
+  <legend>Apps/Services Involved</legend>
+  <table id="appsTable">
+    <thead>
+      <tr>
+        <th>App/Service</th>
+        <th>Available as Native (Yes/No)</th>
+        <th>Plan Required</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="text" name="app_service[]" placeholder="Eg: Google Sheets" /></td>
+        <td><input type="text" name="available_on[]" placeholder="Yes / No" /></td>
+        <td><input type="text" name="plan_required[]" placeholder="Eg: Business Plan" /></td>
+      </tr>
+    </tbody>
+  </table>
+  <button type="button" onclick="addAppRow()">➕ Add Row</button>
+</fieldset>
 
-      <fieldset>
-        <legend>Estimated Execution Complexity<span style="color: red;">*</span></legend>
-        <div class="priority-buttons">
-          <input type="radio" id="complexity-high" name="complexity" value="High" hidden required>
-          <label for="complexity-high" class="priority-btn">🔴 High</label>
-          <input type="radio" id="complexity-medium" name="complexity" value="Medium" hidden>
-          <label for="complexity-medium" class="priority-btn">🟡 Medium</label>
-          <input type="radio" id="complexity-low" name="complexity" value="Low" hidden>
-          <label for="complexity-low" class="priority-btn">⚪ Low</label>
-        </div>
-      </fieldset>
+<!-- Estimated Ballpark -->
+<fieldset>
+  <legend>Estimated Ballpark (in Hours)<span style="color: red;">*</span></legend>
+  <input type="text" name="estimated_hours" required placeholder="Eg: 25-30 hours" />
+</fieldset>
 
-      <fieldset>
-        <legend>Assumptions & Clarifications Needed</legend>
-        <textarea class="bulleted" name="assumptions" rows="5"></textarea>
-      </fieldset>
+<!-- Execution Complexity -->
+<fieldset>
+  <legend>Estimated Execution Complexity<span style="color: red;">*</span></legend>
+  <div class="priority-buttons">
+    <input type="radio" id="complexity-high" name="complexity" value="High" hidden required>
+    <label for="complexity-high" class="priority-btn">🔴 High</label>
+    <input type="radio" id="complexity-medium" name="complexity" value="Medium" hidden>
+    <label for="complexity-medium" class="priority-btn">🟡 Medium</label>
+    <input type="radio" id="complexity-low" name="complexity" value="Low" hidden>
+    <label for="complexity-low" class="priority-btn">⚪ Low</label>
+  </div>
+</fieldset>
 
-      <fieldset>
-        <legend>Proposed Delivery Time</legend>
-        <input type="text" name="delivery_time" />
-      </fieldset>
+<!-- Assumptions -->
+<fieldset>
+  <legend>Assumptions & Clarifications Needed</legend>
+  <textarea class="bulleted" name="assumptions" rows="5" placeholder="• Client will provide access to Salesforce
+• API usage within daily limits
+• Data volume under 1M records"></textarea>
+</fieldset>
 
-      <fieldset>
-        <legend>What We Need From the Client<span style="color: red;">*</span></legend>
-        <textarea class="bulleted" name="client_requirements" rows="5" required></textarea>
-      </fieldset>
+<!-- Delivery Time -->
+<fieldset>
+  <legend>Proposed Delivery Time</legend>
+  <input type="text" name="delivery_time" placeholder="Eg: 2 weeks after approval" />
+</fieldset>
 
+<!-- Client Requirements -->
+<fieldset>
+  <legend>What We Need From the Client<span style="color: red;">*</span></legend>
+  <textarea class="bulleted" name="client_requirements" rows="5" required placeholder="• Admin credentials for HubSpot
+• Sample dataset
+• Approval from IT team"></textarea>
+</fieldset>
       <button type="submit">Submit Feasibility Form</button>
     </form>
   </div>
