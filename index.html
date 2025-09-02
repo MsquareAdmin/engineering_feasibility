@@ -303,30 +303,62 @@
     }
   });
 
-  function toggleNonFeasibleField() {
-    const status = document.getElementById('feasibility_status').value;
-    const partialField = document.getElementById('partialNonFeasibleField');
-    const whyField = document.getElementById('whyNotFeasibleField');
-    const workaroundsField = document.getElementById('workaroundsField');
+function toggleNonFeasibleField() {
+  const status = document.getElementById('feasibility_status').value;
+  const partialField = document.getElementById('partialNonFeasibleField');
+  const whyField = document.getElementById('whyNotFeasibleField');
+  const workaroundsField = document.getElementById('workaroundsField');
 
-    partialField.style.display = "none";
-    whyField.style.display = "none";
-    workaroundsField.style.display = "none";
+  // Helper to disable/enable required inside a container
+  function setRequired(container, enabled) {
+    container.querySelectorAll("[required]").forEach(el => {
+      if (enabled) {
+        el.setAttribute("required", "required");
+      } else {
+        el.removeAttribute("required");
+      }
+    });
+  }
 
-    const form = document.getElementById("feasibilityForm");
-    const allFieldsets = Array.from(form.querySelectorAll("fieldset"));
-    const statusFieldset = document.getElementById("feasibility_status").closest("fieldset");
-    const afterStatusFieldsets = allFieldsets.slice(allFieldsets.indexOf(statusFieldset) + 1);
+  // Hide all optional fields
+  [partialField, whyField, workaroundsField].forEach(fs => {
+    fs.style.display = "none";
+    setRequired(fs, false);
+  });
 
-    if (status === "Not Feasible") {
-      whyField.style.display = "block";
-      afterStatusFieldsets.forEach(fs => fs.style.display = "none");
-    } else {
-      afterStatusFieldsets.forEach(fs => fs.style.display = "block");
-      if (status === "Partially Feasible") partialField.style.display = "block";
-      if (status === "Feasible with Workarounds") workaroundsField.style.display = "block";
+  const form = document.getElementById("feasibilityForm");
+  const allFieldsets = Array.from(form.querySelectorAll("fieldset"));
+  const statusFieldset = document.getElementById("feasibility_status").closest("fieldset");
+  const afterStatusFieldsets = allFieldsets.slice(allFieldsets.indexOf(statusFieldset) + 1);
+
+  if (status === "Not Feasible") {
+    // Only show WHY field
+    whyField.style.display = "block";
+    setRequired(whyField, true);
+
+    // Hide the rest
+    afterStatusFieldsets.forEach(fs => {
+      fs.style.display = "none";
+      setRequired(fs, false);
+    });
+  } else {
+    // Show everything after status
+    afterStatusFieldsets.forEach(fs => {
+      fs.style.display = "block";
+      setRequired(fs, true);
+    });
+
+    if (status === "Partially Feasible") {
+      partialField.style.display = "block";
+      setRequired(partialField, true);
+    }
+
+    if (status === "Feasible with Workarounds") {
+      workaroundsField.style.display = "block";
+      setRequired(workaroundsField, true);
     }
   }
+}
 
   function addAppRow() {
     const table = document.getElementById('appsTable').getElementsByTagName('tbody')[0];
