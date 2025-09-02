@@ -188,39 +188,36 @@
 
   <div id="workaroundsField" style="display: none; margin-top: 20px;">
     <label>Not-Feasible Components & Workarounds:</label>
-    <textarea class="bulleted" name="workarounds" rows="5" placeholder="• Component X not supported → Workaround: Use API instead
-• Limited integration with Y → Workaround: Manual sync once a week"></textarea>
+    <textarea class="bulleted" name="workarounds" rows="5" placeholder="• Use third-party API instead of native integration. 
+• Implement manual approval flow as a temporary solution."></textarea>
   </div>
 
   <div id="partialNonFeasibleField" style="display: none; margin-top: 20px;">
     <label>What is Not Feasible?:</label>
-    <textarea class="bulleted" name="non_feasible_components" rows="5" placeholder="• Direct export to SAP
-• Real-time sync across all regions"></textarea>
+    <textarea class="bulleted" name="non_feasible_components" rows="5" placeholder="• WhatsApp Business API requires official number — not feasible without approval.
+• Workaround: Use Twilio SMS for now."></textarea>
   </div>
 
   <div id="whyNotFeasibleField" style="display: none; margin-top: 20px;">
     <label>Why Not-Feasible?</label>
-    <textarea class="bulleted" name="why_not_feasible" rows="6" placeholder="• Vendor does not provide required API
-• Security restrictions prevent automation
-• High dependency on manual approvals"></textarea>
+    <textarea class="bulleted" name="why_not_feasible" rows="6" placeholder="• WhatsApp Business API requires verified Facebook Business Manager, which client lacks.
+• Shopify checkout flow cannot be customized to include external payment gateways due to platform restrictions."></textarea>
   </div>
 </fieldset>
 
 <!-- Proposed Solution -->
 <fieldset>
   <legend>Proposed Solution<span style="color: red;">*</span></legend>
-  <textarea class="bulleted" name="proposed_solution" rows="5" required placeholder="• Automate data collection using Zapier
-• Store reports in Google Drive
-• Notify stakeholders via Slack"></textarea>
+  <textarea class="bulleted" name="proposed_solution" rows="5" required placeholder="• Use Make.com to fetch order data from Shopify every 15 minutes.
+• Automatically send the data to Google Sheets for reporting."></textarea>
 </fieldset>
 
 <!-- Workflow Steps -->
 <fieldset>
   <legend>Workflow Steps<span style="color: red;">*</span></legend>
-  <textarea class="bulleted" name="workflow_steps" rows="6" required placeholder="• Step 1: Collect input from Google Forms
-• Step 2: Transform data in Airtable
-• Step 3: Generate PDF using Make
-• Step 4: Email to client automatically"></textarea>
+  <textarea class="bulleted" name="workflow_steps" rows="6" required placeholder="• Trigger: New row added in Google Sheets
+• Action: Extract customer name, send WhatsApp message
+• Log data in Airtable"></textarea>
   <label>Upload Process Diagram (if available):</label>
   <input type="file" name="workflow_image" accept="image/*" />
 </fieldset>
@@ -250,7 +247,7 @@
 <!-- Estimated Ballpark -->
 <fieldset>
   <legend>Estimated Ballpark (in Hours)<span style="color: red;">*</span></legend>
-  <input type="text" name="estimated_hours" required placeholder="Eg: 25-30 hours" />
+  <input type="text" name="estimated_hours" required placeholder="e.g., 12-15 Hours" />
 </fieldset>
 
 <!-- Execution Complexity -->
@@ -269,23 +266,22 @@
 <!-- Assumptions -->
 <fieldset>
   <legend>Assumptions & Clarifications Needed</legend>
-  <textarea class="bulleted" name="assumptions" rows="5" placeholder="• Client will provide access to Salesforce
-• API usage within daily limits
-• Data volume under 1M records"></textarea>
+  <textarea class="bulleted" name="assumptions" rows="5" placeholder="• Assume client has admin access to Gmail and Tally.
+• Clarify whether all orders need to be synced or only paid ones."></textarea>
 </fieldset>
 
 <!-- Delivery Time -->
 <fieldset>
   <legend>Proposed Delivery Time</legend>
-  <input type="text" name="delivery_time" placeholder="Eg: 2 weeks after approval" />
+  <input type="text" name="delivery_time" placeholder="e.g., 5 working days" />
 </fieldset>
 
 <!-- Client Requirements -->
 <fieldset>
   <legend>What We Need From the Client<span style="color: red;">*</span></legend>
-  <textarea class="bulleted" name="client_requirements" rows="5" required placeholder="• Admin credentials for HubSpot
-• Sample dataset
-• Approval from IT team"></textarea>
+  <textarea class="bulleted" name="client_requirements" rows="5" required placeholder="• Admin access to Make.com/n8n
+• API credentials for Zoho, Shopify
+• Confirmation on proposal solutions"></textarea>
 </fieldset>
       <button type="submit">Submit Feasibility Form</button>
     </form>
